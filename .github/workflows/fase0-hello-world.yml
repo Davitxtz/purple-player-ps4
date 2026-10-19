@@ -1,11 +1,11 @@
 
-name: Fase 0 - testar toolchain (hello_world oficial)
+name: Fase 0 - testar toolchain (graphics oficial)
 
 on:
   workflow_dispatch:
 
 jobs:
-  hello-world:
+  graphics:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,22 +19,20 @@ jobs:
           ref: v0.5.1
           path: oo
 
-      - name: Compilar e empacotar exemplo gráfico
+      - name: Compilar e empacotar exemplo grafico
         run: |
           docker run --rm \
             --user 0:0 \
             -v "$GITHUB_WORKSPACE/oo:/workspace" \
-                    -w /workspace/samples/graphics \
+            -w /workspace/samples/graphics \
             openorbisofficial/toolchain:v0.5.1 \
-
-          bash -lc 'set -e
-           sed -i "s|^COMMONDIR.*|COMMONDIR   := /workspace/samples/_common|" Makefile
-           make clean
-           make
-          /lib/OpenOrbisSDK/bin/linux/PkgTool.Core pkg_build pkg/pkg.gp4 .
-           echo "=== PKG GERADO ==="
-           find . -maxdepth 1 -type f -name "*.pkg"'
-  
+            bash -lc 'set -e
+              sed -i "s|^COMMONDIR.*|COMMONDIR   := /workspace/samples/_common|" Makefile
+              make clean
+              make
+              /lib/OpenOrbisSDK/bin/linux/PkgTool.Core pkg_build pkg/pkg.gp4 .
+              echo "=== PKG GERADO ==="
+              find . -maxdepth 1 -type f -name "*.pkg"'
 
       - name: Disponibilizar PKG para download
         uses: actions/upload-artifact@v4
@@ -42,4 +40,3 @@ jobs:
           name: graphics-teste-pkg
           path: oo/samples/graphics/*.pkg
           if-no-files-found: error
-          
