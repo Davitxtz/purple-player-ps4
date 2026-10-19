@@ -21,23 +21,16 @@ jobs:
       # Antes de compilar, imprime Makefile, pkg.gp4 e a lista de arquivos
       # do exemplo: esse log mostra a estrutura real que o Purple Player
       # vai precisar copiar na Fase 1.
-      - name: Compilar hello_world oficial e gerar PKG
-        uses: OpenOrbis/toolchain-action@main
-        with:
-          version: v0.5.1
-          command: >-
-            cd oo/samples/hello_world;
-            echo "=== ARQUIVOS ===";
-            ls -R .;
-            echo "=== MAKEFILE ===";
-            cat Makefile;
-            echo "=== PKG.GP4 ===";
-            cat pkg/pkg.gp4;
-            echo "=== COMPILANDO ===";
-            make && PkgTool.Core pkg_build pkg/pkg.gp4 . && ls -la
 
-      - name: Guardar o PKG gerado
-        uses: actions/upload-artifact@v4
+      - name: Compilar hello_world oficial e gerar PKG
+        run: |
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE/oo:/workspace" \
+            -w /workspace/samples/hello_world \
+            openorbisofficial/toolchain:v0.5.1 \
+            bash -lc 'echo "=== ARQUIVOS ==="; ls -R .; echo "=== COMPILANDO ==="; make && PkgTool.Core pkg_build pkg/pkg.gp4 .'
+            
+      - uses: actions/upload-artifact@v4
         with:
           name: hello-world-pkg
           path: oo/samples/hello_world/**/*.pkg
