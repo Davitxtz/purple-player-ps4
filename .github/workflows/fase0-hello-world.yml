@@ -1,0 +1,44 @@
+name: Fase 0 - testar toolchain (hello_world oficial)
+
+# Roda só quando você mandar (aba Actions > este fluxo > Run workflow).
+on:
+  workflow_dispatch:
+
+jobs:
+  hello-world:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o codigo deste projeto
+        uses: actions/checkout@v4
+
+      - name: Baixar os exemplos oficiais do OpenOrbis
+        uses: actions/checkout@v4
+        with:
+          repository: OpenOrbis/OpenOrbis-PS4-Toolchain
+          path: oo
+
+      # Padrao documentado no DOCKER.md do OpenOrbis (toolchain-action).
+      # Antes de compilar, imprime Makefile, pkg.gp4 e a lista de arquivos
+      # do exemplo: esse log mostra a estrutura real que o Purple Player
+      # vai precisar copiar na Fase 1.
+      - name: Compilar hello_world oficial e gerar PKG
+        uses: OpenOrbis/toolchain-action@main
+        with:
+          version: latest
+          command: >-
+            cd oo/samples/hello_world;
+            echo "=== ARQUIVOS ===";
+            ls -R .;
+            echo "=== MAKEFILE ===";
+            cat Makefile;
+            echo "=== PKG.GP4 ===";
+            cat pkg/pkg.gp4;
+            echo "=== COMPILANDO ===";
+            make && PkgTool.Core pkg_build pkg/pkg.gp4 . && ls -la
+
+      - name: Guardar o PKG gerado
+        uses: actions/upload-artifact@v4
+        with:
+          name: hello-world-pkg
+          path: oo/samples/hello_world/**/*.pkg
+          if-no-files-found: error
