@@ -25,5 +25,5 @@ jobs:
             -v "$GITHUB_WORKSPACE/oo:/workspace" \
             -w /workspace/samples/hello_world \
             openorbisofficial/toolchain:v0.5.1 \
-            
-           bash -lc 'echo "=== MAKE-FSELF ==="; sed -n "1,220p" /lib/OpenOrbisSDK/scripts/make_fself.py; echo "=== FERRAMENTAS ==="; ls -la /usr/lib/OpenOrbisSDK/bin/linux/; echo "=== CONFIGURACAO MAKEFILE ==="; sed -n "1,65p" Makefile'
+                 bash -lc 'echo "=== DIRETORIO ==="; pwd; echo "=== CONTEUDO ==="; ls -la; echo "=== LOCALIZAR MAKEFILE ==="; find /workspace -name Makefile -o -name make_fself.py -o -name PkgTool.Core 2>/dev/null; echo "=== SDK ==="; ls -la /lib/OpenOrbisSDK /usr/lib/OpenOrbisSDK 2>&1'
+
