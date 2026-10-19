@@ -22,8 +22,14 @@ jobs:
       - name: Diagnosticar toolchain e exemplo
         run: |
           docker run --rm \
+                - name: Disponibilizar PKG para download
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hello-world-pkg
+          path: oo/samples/hello_world/*.pkg
+          if-no-files-found: error
             --user 0:0 \
             -v "$GITHUB_WORKSPACE/oo:/workspace" \
             -w /workspace/samples/hello_world \
             openorbisofficial/toolchain:v0.5.1 \
-                    bash -lc 'echo "=== GP4 DO EXEMPLO ==="; find /workspace/samples/hello_world -type f -name "*.gp4"; echo "=== TEMPLATE DO SDK ==="; sed -n "1,100p" /lib/OpenOrbisSDK/bin/data/template.gp4; echo "=== ESTRUTURA DO EXEMPLO ==="; find /workspace/samples/hello_world -maxdepth 3 -type f | head -80'
+                    bash -lc 'set -e; make; /lib/OpenOrbisSDK/bin/linux/PkgTool.Core pkg_build pkg/pkg.gp4 .; echo "=== PKG GERADO ==="; find . -maxdepth 1 -type f -name "*.pkg"'
