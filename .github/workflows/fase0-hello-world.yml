@@ -26,4 +26,4 @@ jobs:
             -v "$GITHUB_WORKSPACE/oo:/workspace" \
             -w /workspace/samples/hello_world \
             openorbisofficial/toolchain:v0.5.1 \
-                    bash -lc 'make clean || true; make; echo "=== ARQUIVOS GERADOS ==="; find . -type f \( -name "*.elf" -o -name "*.oelf" -o -name "eboot.bin" -o -name "*.pkg" \)'
+                    bash -lc 'echo "=== PkgTool.Core ==="; /lib/OpenOrbisSDK/bin/linux/PkgTool.Core --help 2>&1 || true; echo "=== MAKEFILE: ETAPA DE PKG ==="; grep -n -i -E "pkg|gp4|PkgTool|eboot" Makefile; echo "=== ARQUIVOS DE PACOTE ==="; find /lib/OpenOrbisSDK -type f \( -iname "*.gp4" -o -iname "*pkg*" \) 2>/dev/null | head -40'
