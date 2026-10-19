@@ -26,11 +26,15 @@ jobs:
             -v "$GITHUB_WORKSPACE/oo:/workspace" \
                     -w /workspace/samples/graphics \
             openorbisofficial/toolchain:v0.5.1 \
-            bash -lc 'set -e
-              make
-              /lib/OpenOrbisSDK/bin/linux/PkgTool.Core pkg_build pkg/pkg.gp4 .
-              echo "=== PKG GERADO ==="
-              find . -maxdepth 1 -type f -name "*.pkg"'
+
+          bash -lc 'set -e
+           sed -i "s|^COMMONDIR.*|COMMONDIR   := /workspace/samples/_common|" Makefile
+           make clean
+           make
+          /lib/OpenOrbisSDK/bin/linux/PkgTool.Core pkg_build pkg/pkg.gp4 .
+           echo "=== PKG GERADO ==="
+           find . -maxdepth 1 -type f -name "*.pkg"'
+  
 
       - name: Disponibilizar PKG para download
         uses: actions/upload-artifact@v4
