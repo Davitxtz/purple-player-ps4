@@ -1,0 +1,15 @@
+# Resultados de compilacao
+*.o
+*.elf
+*.oelf
+*.pkg
+eboot.bin
+build/
+# Testes no PC
+player_pc
+player_shot
+*.ppm
+purple_player.cfg
+usb/
+console/
+gravacoes/
