@@ -25,6 +25,7 @@ jobs:
       - name: Compilar hello_world oficial e gerar PKG
         run: |
           docker run --rm \
+            --user 0:0 \
             -v "$GITHUB_WORKSPACE/oo:/workspace" \
             -w /workspace/samples/hello_world \
             openorbisofficial/toolchain:v0.5.1 \
