@@ -19,12 +19,12 @@ jobs:
           ref: v0.5.1
           path: oo
 
-      - name: Compilar e empacotar Hello World
+      - name: Compilar e empacotar exemplo gráfico
         run: |
           docker run --rm \
             --user 0:0 \
             -v "$GITHUB_WORKSPACE/oo:/workspace" \
-            -w /workspace/samples/hello_world \
+                    -w /workspace/samples/graphics \
             openorbisofficial/toolchain:v0.5.1 \
             bash -lc 'set -e
               make
@@ -35,7 +35,7 @@ jobs:
       - name: Disponibilizar PKG para download
         uses: actions/upload-artifact@v4
         with:
-          name: hello-world-pkg
-          path: oo/samples/hello_world/*.pkg
+          name: graphics-teste-pkg
+          path: oo/samples/graphics/*.pkg
           if-no-files-found: error
           
