@@ -24,7 +24,7 @@ jobs:
       - name: Compilar hello_world oficial e gerar PKG
         uses: OpenOrbis/toolchain-action@main
         with:
-          version: latest
+          version: v0.5.1
           command: >-
             cd oo/samples/hello_world;
             echo "=== ARQUIVOS ===";
