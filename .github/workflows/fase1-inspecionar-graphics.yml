@@ -1,0 +1,44 @@
+name: Fase 1 - inspecionar exemplo graphics (so leitura)
+
+# Nao compila nada e nao usa Docker. Le os arquivos do exemplo graphics
+# (v0.5.1) e escreve tudo na pagina de RESUMO da execucao.
+on:
+  workflow_dispatch:
+
+jobs:
+  inspecionar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar os exemplos oficiais do OpenOrbis
+        uses: actions/checkout@v4
+        with:
+          repository: OpenOrbis/OpenOrbis-PS4-Toolchain
+          ref: v0.5.1
+          path: oo
+
+      - name: Escrever os arquivos no resumo
+        run: |
+          cd oo/samples
+          out="$GITHUB_STEP_SUMMARY"
+          show() {
+            if [ ! -f "$1" ]; then echo "(nao existe: $1)"; return; fi
+            echo "### $1" >> "$out"
+            echo '```' >> "$out"
+            head -n "$2" "$1" >> "$out"
+            echo '```' >> "$out"
+            echo "=== $1 ==="
+            head -n "$2" "$1"
+          }
+          echo "## Estrutura" >> "$out"
+          echo '```' >> "$out"
+          ls -R graphics _common | head -150 >> "$out"
+          echo '```' >> "$out"
+          ls -R graphics _common | head -150
+          show graphics/Makefile 200
+          show graphics/pkg/pkg.gp4 200
+          for f in $(find graphics -maxdepth 2 -type f \( -name '*.c' -o -name '*.cpp' -o -name '*.h' \) | sort); do
+            show "$f" 400
+          done
+          for f in $(find _common -maxdepth 1 -type f -name '*.h' | sort); do
+            show "$f" 300
+          done
