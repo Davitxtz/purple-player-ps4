@@ -26,4 +26,4 @@ jobs:
             -v "$GITHUB_WORKSPACE/oo:/workspace" \
             -w /workspace/samples/hello_world \
             openorbisofficial/toolchain:v0.5.1 \
-                    bash -lc 'echo "=== SCRIPT FSELF ==="; python3 /workspace/scripts/make_fself.py --help 2>&1 || true; echo "=== BINARIOS DO SDK ==="; find /lib/OpenOrbisSDK/bin -maxdepth 3 -type f 2>/dev/null | head -80; echo "=== MAKEFILE ==="; sed -n "1,45p" Makefile'
+                    bash -lc 'make clean || true; make; echo "=== ARQUIVOS GERADOS ==="; find . -type f \( -name "*.elf" -o -name "*.oelf" -o -name "eboot.bin" -o -name "*.pkg" \)'
